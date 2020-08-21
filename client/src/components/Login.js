@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 
 const initialCredentials = {
@@ -18,27 +19,48 @@ const Login = () => {
 
   const handleChange = event => {
     setCredentials({
+      ...credentials,
       [event.target.name]: event.target.value
     })
   }
 
+  const login = event => {
+    event.preventDefault()
+    setIsLoading(true)
+    axiosWithAuth().post('/api/login', credentials)
+      .then(res => {
+        console.log(res)
+        //saving to localStorage
+        localStorage.setItem('token', res.data.payload)
+        setIsLoading(false)
+        //redirecting to BubblePage
+        history.push('/colors')
+
+      })
+      .catch(err => {
+        console.log(err)
+        setIsLoading(false)
+        setError(err.message)
+      })
+  }
+
   return (
-    <form>
+    <form onSubmit={login}>
       <label>Username</label>
       <input
         type='text'
         name='username'
         id='username'
-        // value={}
+        value={credentials.username}
         onChange={handleChange}
       />
 
       <label>Password</label>
       <input
-        type='password'
+        type='text'
         name='password'
         id='password'
-        // value={}
+        value={credentials.password}
         onChange={handleChange}
       />
 
