@@ -19,7 +19,7 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
   
-  console.log(colorToEdit)
+  // console.log(colorToEdit)
 
   const saveEdit = e => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const ColorList = ({ colors, updateColors }) => {
     // where is is saved right now?
     axiosWithAuth().put(`/api/colors/${colorToEdit.id}`, colorToEdit)
     .then(res => {
-      console.log(res)
+      // console.log(res)
       const newColorsArr = colors.map(color => {
         if(color.id === res.data.id) {
           return res.data
@@ -48,7 +48,7 @@ const ColorList = ({ colors, updateColors }) => {
     // make a delete request to delete this color
     axiosWithAuth().delete(`/api/colors/${color.id}`)
       .then(res => {
-        console.log(res)
+        // console.log(res)
         const deleteColorsArr = colors.filter(item => {
           if(item.id === res.data) {
             return !res.data
